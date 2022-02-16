@@ -17,49 +17,55 @@ class AuthService {
   }
 
   Future<User?> signInWithEmailAndPassword(
+    BuildContext context,
     String email,
     String password,
   ) async {
-    final credential = await _firebaseAuth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    showCircularProgressIndicator(context);
+    final credential = await _firebaseAuth
+        .signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        )
+        .whenComplete(() => Navigator.of(context).pop());
     return _userFromFirebase(credential.user);
   }
 
   Future<User?> createUserWithEmailAndPassword(
+    BuildContext context,
     String email,
     String password,
   ) async {
-    final credential = await _firebaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+    showCircularProgressIndicator(context);
+    final credential = await _firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password)
+        .whenComplete(() => Navigator.of(context).pop());
     return _userFromFirebase(credential.user);
   }
 
   Future<void> sendPasswordResetEmail(
       BuildContext context, String email) async {
-    showDialog(
+    showCircularProgressIndicator(context);
+    return await _firebaseAuth
+        .sendPasswordResetEmail(email: email)
+        .whenComplete(() => Navigator.of(context).pop());
+  }
+
+  Future<void> signOut(BuildContext context) async {
+    showCircularProgressIndicator(context);
+    return await _firebaseAuth
+        .signOut()
+        .whenComplete(() => Navigator.pop(context));
+  }
+
+  Future<dynamic> showCircularProgressIndicator(BuildContext context) {
+    return showDialog(
       context: context,
+      barrierDismissible: false,
+      useSafeArea: true,
       builder: (context) => const Center(
         child: CircularProgressIndicator(),
       ),
     );
-    try {
-      await _firebaseAuth.sendPasswordResetEmail(email: email);
-      Navigator.of(context).pop();
-    } on Exception catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            e.toString(),
-          ),
-        ),
-      );
-      Navigator.of(context).pop();
-    }
-  }
-
-  Future<void> signOut() async {
-    return await _firebaseAuth.signOut();
   }
 }

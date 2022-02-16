@@ -17,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
             fit: BoxFit.fitWidth,
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 "Classmates",
@@ -35,28 +35,39 @@ class WelcomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ReusableButton(
-                    text: "Login",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
-                    },
+                  const Spacer(),
+                  Expanded(
+                    flex: 8,
+                    child: ReusableButton(
+                      text: "Login",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  ReusableButton(
-                    text: "Sign Up",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
-                        ),
-                      );
-                    },
+                  const Spacer(
+                    flex: 2,
                   ),
+                  Expanded(
+                    flex: 8,
+                    child: ReusableButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignupScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const Spacer(),
                 ],
               ),
               const SizedBox(height: 15.0),
@@ -84,7 +95,9 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(height: 15.0),
+              const SizedBox(
+                height: 15.0,
+              ),
             ],
           )
         ],

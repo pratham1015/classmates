@@ -1,7 +1,10 @@
 import 'package:classmates/components/custom_textfield.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/constants/constants.dart';
+import 'package:classmates/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 
 class ForgotPasswordSheet extends StatelessWidget {
   const ForgotPasswordSheet({
@@ -13,10 +16,12 @@ class ForgotPasswordSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final authService = Provider.of<AuthService>(context);
+
     return Padding(
       padding: MediaQuery.of(context).viewInsets,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.35,
+        height: 300.0,
         padding: const EdgeInsets.all(12.0),
         child: Center(
           child: Column(
@@ -63,10 +68,27 @@ class ForgotPasswordSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 200,
                     child: ReusableButton(
                       text: "Reset Password",
+                      onPressed: () async {
+                        try {
+                          await authService
+                              .sendPasswordResetEmail(
+                                  context, emailController.text)
+                              .then(
+                                (_) => Fluttertoast.showToast(
+                                  msg: "Password Reset Mail Sent",
+                                ),
+                              );
+                          Navigator.pop(context);
+                        } on Exception catch (error) {
+                          Fluttertoast.showToast(
+                            msg: error.toString(),
+                          );
+                        }
+                      },
                     ),
                   ),
                 ],

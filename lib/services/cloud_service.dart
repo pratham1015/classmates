@@ -31,6 +31,15 @@ class CloudService {
     });
   }
 
+  getsearchlist(String College, String Year, String Dept) {
+    FirebaseFirestore.instance
+        .collection("Users")
+        .where("College", isEqualTo: College)
+        .where("Year", isEqualTo: Year)
+        .where("Department", isEqualTo: Dept)
+        .get();
+  }
+
   Future<DocumentSnapshot> getMyInfo(String uid) async {
     DocumentSnapshot docSnapshot = await docref.get();
     return docSnapshot;

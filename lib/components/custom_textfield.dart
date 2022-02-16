@@ -22,12 +22,10 @@ class CustomTextField extends StatelessWidget {
       ),
       child: TextField(
         controller: controller,
-        style: const TextStyle(fontSize: 20),
         autofocus: autofocus ?? false,
         obscureText: isObscure ?? false,
         decoration: InputDecoration(
-          contentPadding:
-              const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
+          isDense: true,
           border: OutlineInputBorder(
             borderRadius: borderRadius10,
           ),

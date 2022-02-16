@@ -17,9 +17,15 @@ class _AddBadgesSheetState extends State<AddBadgesSheet> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 400.0,
+      height: 1000,
+      decoration: const BoxDecoration(
+        color: Color(0xFF5C83E0),
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
       padding: const EdgeInsets.all(10.0),
-      color: const Color(0xFF5C83E0),
       child: Column(
         children: [
           Align(
@@ -34,79 +40,80 @@ class _AddBadgesSheetState extends State<AddBadgesSheet> {
               ),
             ),
           ),
-          Expanded(
-            child: Container(
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20.0),
               color: Colors.white30,
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: [
-                  Center(
-                    child: Column(
-                      children: [
-                        RadioButton(
-                          value: "Skill",
-                          groupValue: selectedToggle,
-                          onChanged: (String? val) {
-                            setState(() {
-                              if (val != null) {
-                                selectedToggle = val;
-                              }
-                            });
-                          },
-                        ),
-                        RadioButton(
-                          value: "Awards",
-                          groupValue: selectedToggle,
-                          onChanged: (String? val) {
-                            setState(() {
-                              if (val != null) {
-                                selectedToggle = val;
-                              }
-                            });
-                          },
-                        ),
-                        RadioButton(
-                          value: "Previous Jobs",
-                          groupValue: selectedToggle,
-                          onChanged: (String? val) {
-                            setState(() {
-                              if (val != null) {
-                                selectedToggle = val;
-                              }
-                            });
-                          },
-                        ),
-                      ],
-                    ),
+            ),
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              children: [
+                Center(
+                  child: Column(
+                    children: [
+                      RadioButton(
+                        value: "Skill",
+                        groupValue: selectedToggle,
+                        onChanged: (String? val) {
+                          setState(() {
+                            if (val != null) {
+                              selectedToggle = val;
+                            }
+                          });
+                        },
+                      ),
+                      RadioButton(
+                        value: "Awards",
+                        groupValue: selectedToggle,
+                        onChanged: (String? val) {
+                          setState(() {
+                            if (val != null) {
+                              selectedToggle = val;
+                            }
+                          });
+                        },
+                      ),
+                      RadioButton(
+                        value: "Previous Jobs",
+                        groupValue: selectedToggle,
+                        onChanged: (String? val) {
+                          setState(() {
+                            if (val != null) {
+                              selectedToggle = val;
+                            }
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                  const SizedBox(
-                    height: 20.0,
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Add $selectedToggle",
+                    style: const TextStyle(
+                        fontFamily: 'Roboto',
+                        fontSize: 24.0,
+                        fontWeight: FontWeight.w600),
                   ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Add $selectedToggle",
-                      style: const TextStyle(
-                          fontFamily: 'Roboto',
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10.0,
-                  ),
-                  CustomTextField(
-                    controller: badgeDetailController,
-                  ),
-                  const SizedBox(
-                    height: 20.0,
-                  ),
-                  ReusableButton(
-                    text: "Submit",
-                    onPressed: () {},
-                  )
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 10.0,
+                ),
+                CustomTextField(
+                  controller: badgeDetailController,
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                ReusableButton(
+                  text: "Submit",
+                  onPressed: () {},
+                )
+              ],
             ),
           ),
         ],
@@ -130,17 +137,19 @@ class RadioButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 160.0,
+      height: 40.0,
+      width: 175.0,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Radio(
+            activeColor: Colors.red,
             value: value,
             groupValue: groupValue,
             onChanged: onChanged,
           ),
           const SizedBox(
-            width: 10.0,
+            width: 5.0,
           ),
           Text(
             value,

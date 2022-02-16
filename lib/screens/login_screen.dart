@@ -9,9 +9,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
@@ -107,18 +112,24 @@ class LoginScreen extends StatelessWidget {
                   child: ReusableButton(
                     text: "Login",
                     onPressed: () async {
-                      await authService
-                          .signInWithEmailAndPassword(
-                              emailController.text, passwordController.text)
-                          .whenComplete(() {
-                        Fluttertoast.showToast(msg: "Login Success");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                        );
-                      });
+                      try {
+                        await authService
+                            .signInWithEmailAndPassword(
+                                context,
+                                emailController.text.trim(),
+                                passwordController.text.trim())
+                            .then((value) {
+                          Fluttertoast.showToast(msg: "Signed In Sucessfully");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        });
+                      } on Exception catch (error) {
+                        Fluttertoast.showToast(msg: error.toString());
+                      }
                     },
                   ),
                 ),

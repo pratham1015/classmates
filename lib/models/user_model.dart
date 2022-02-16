@@ -4,3 +4,10 @@ class User {
 
   User(this.uid, this.email);
 }
+
+class Userprofile {
+  final String? url;
+  final String? name;
+
+  Userprofile(this.url, this.name);
+}

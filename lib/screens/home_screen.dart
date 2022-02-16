@@ -1,19 +1,21 @@
-// ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
-// ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:classmates/components/image_picker.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/components/textfield_with_list.dart';
 import 'package:classmates/components/user_avatar.dart';
+import 'package:classmates/components/user_display_card.dart';
 import 'package:classmates/constants/constants.dart';
+import 'package:classmates/models/user_model.dart';
+import 'package:classmates/screens/sheets/add_badges_sheet.dart';
 import 'package:classmates/services/cloud_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import '../components/custom_textfield.dart';
+import 'package:classmates/components/custom_textfield.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -27,255 +29,13 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController collegesearchController = TextEditingController();
   TextEditingController yearsearchController = TextEditingController();
   TextEditingController deptsearchController = TextEditingController();
+  TextEditingController inviteController = TextEditingController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
   String? url;
   List<String>? unilist = [];
   List<String>? deptlist = [];
   List<String>? yearlist = [];
-
-  Widget searchperson(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Center(
-        child: Text(
-          "Search User",
-          style: TextStyle(
-              color: Colors.white, fontSize: 36, fontWeight: FontWeight.w700),
-        ),
-      ),
-      SizedBox(
-        height: 15.0,
-      ),
-      Container(
-        padding: EdgeInsets.only(left: 6),
-        child: const Text(
-          "College",
-          style: TextStyle(
-              fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
-        ),
-      ),
-      TextfieldList(
-        list: unilist,
-        controller: collegesearchController,
-      ),
-      SizedBox(
-        height: 15.0,
-      ),
-      Row(children: [
-        Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              padding: EdgeInsets.only(left: 6),
-              child: const Text(
-                "Year",
-                style: TextStyle(
-                    fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
-              ),
-            ),
-            TextfieldList(
-              controller: yearsearchController,
-              list: yearlist,
-            )
-          ]),
-        ),
-        Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              padding: EdgeInsets.only(left: 6),
-              child: const Text(
-                "Department",
-                style: TextStyle(
-                    fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
-              ),
-            ),
-            TextfieldList(
-              controller: deptsearchController,
-              list: deptlist,
-            )
-          ]),
-        ),
-      ]),
-      Container(
-        padding: EdgeInsets.only(left: 6),
-        child: const Text(
-          "Class",
-          style: TextStyle(
-              fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
-        ),
-      ),
-      SizedBox(
-        height: 10,
-      ),
-      Container(
-        decoration: BoxDecoration(
-            borderRadius: borderRadius10,
-            color: Colors.white,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 1.0, // soften the shadow
-                spreadRadius: 2, //extend the shadow
-                offset: Offset(
-                  0, // Move to right 10  horizontally
-                  0, // Move to bottom 10 Vertically
-                ),
-              )
-            ]),
-        height: 200,
-        // width: 200,
-      ),
-      SizedBox(
-        height: 25,
-      ),
-      Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ReusableButton(
-              onPressed: () {
-                getsearchlist(collegesearchController.text,
-                    yearsearchController.text, deptsearchController.text);
-              },
-              text: "Search",
-            ),
-            ReusableButton(
-              // onPressed: () => showBottomSheet(context: context, builder: ),
-              text: "Invite",
-            ),
-          ],
-        ),
-      ),
-    ]);
-  }
-
-  Widget myProfile() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: Text(
-            "My Profile",
-            style: TextStyle(
-                color: Colors.white, fontSize: 36, fontWeight: FontWeight.w700),
-          ),
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            GestureDetector(
-              child: UserAvatar(
-                profilePic: url,
-              ),
-              onTap: () {
-                ImageScreen().showPicker(context);
-              },
-            ),
-            Container(
-              margin: EdgeInsets.only(top: 20, left: 5),
-              child: Text(
-                "Badges",
-                style: TextStyle(color: Colors.white, fontSize: 22),
-              ),
-            )
-          ],
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 6),
-          child: const Text(
-            "Name",
-            style: TextStyle(
-                fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
-          ),
-        ),
-        CustomTextField(
-          controller: nameController,
-        ),
-        SizedBox(
-          height: 15.0,
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 6),
-          child: const Text(
-            "College",
-            style: TextStyle(
-                fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
-          ),
-        ),
-        CustomTextField(
-          controller: collegeController,
-        ),
-        SizedBox(
-          height: 15.0,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 6),
-                      child: const Text(
-                        "Year",
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 20,
-                            color: Colors.white),
-                      ),
-                    ),
-                    CustomTextField(controller: yearController)
-                  ]),
-            ),
-            Expanded(
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: EdgeInsets.only(left: 6),
-                      child: const Text(
-                        "Department",
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 20,
-                            color: Colors.white),
-                      ),
-                    ),
-                    CustomTextField(controller: deptController)
-                  ]),
-            )
-          ],
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Center(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              ReusableButton(
-                onPressed: () {
-                  Map<String, dynamic> userData = {
-                    "College": collegeController.text,
-                    "Year": yearController.text,
-                    "Department": deptController.text,
-                    "Name": nameController.text,
-                    "Uid": FirebaseAuth.instance.currentUser!.uid,
-                  };
-                  CloudService().addUserInfo(userData);
-                },
-                text: "Save",
-              ),
-              ReusableButton(
-                // onPressed: () => showBottomSheet(context: context, builder: ),
-                text: "Add Badges",
-              ),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
+  List<Userprofile> userprof = [];
 
   DocumentReference docref = FirebaseFirestore.instance
       .collection("Users")
@@ -352,8 +112,12 @@ class _HomeScreenState extends State<HomeScreen> {
         .get();
     if (docsnapshot.docs.isNotEmpty) {
       setState(() {
-        Map<String, dynamic> data = docsnapshot.docs.first.data();
-        Fluttertoast.showToast(msg: data['Name']);
+        for (int i = 0; i < docsnapshot.docs.length; i++) {
+          userprof.add(Userprofile(
+              docsnapshot.docs.elementAt(i).data()['image1url'],
+              docsnapshot.docs.elementAt(i).data()['Name']));
+          Fluttertoast.showToast(msg: userprof.length.toString());
+        }
       });
     }
   }
@@ -368,101 +132,369 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // bottomNavigationBar: ,
-      backgroundColor: Color(0xff6991F1),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          child: Stack(children: [
-            Image.asset(
-              "assets/images/Group 10.png",
-              fit: BoxFit.fitWidth,
-            ),
-            Container(
-              margin: EdgeInsets.all(10),
-              child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    myprof ? myProfile() : searchperson(context),
-                    SizedBox(
-                      height: 30,
+      bottomNavigationBar: SizedBox(
+        height: 75.0,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    if (!myprof) {
+                      setState(() {
+                        myprof = true;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: myprof
+                            ? const Color(0xFF2757C5)
+                            : Colors.transparent,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: myprof ? Colors.white : Colors.white24,
+                            width: 3)),
+                    child: Image(
+                      image: const AssetImage("assets/images/user.png"),
+                      color: myprof ? Colors.white : Colors.white24,
+                      width: 35,
+                      height: 35,
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              if (!myprof) {
-                                setState(() {
-                                  myprof = true;
-                                });
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: myprof
-                                      ? Color(0xFF2757C5)
-                                      : Colors.transparent,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: myprof
-                                          ? Colors.white
-                                          : Colors.white24,
-                                      width: 3)),
-                              child: Image(
-                                image: AssetImage("assets/images/user.png"),
-                                color: myprof ? Colors.white : Colors.white24,
-                                width: 35,
-                                height: 35,
-                              ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: 20,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (myprof) {
-                                setState(() {
-                                  myprof = false;
-                                });
-                              }
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: !myprof
-                                      ? Color(0xFF2757C5)
-                                      : Colors.transparent,
-                                  border: Border.all(
-                                      color: !myprof
-                                          ? Colors.white
-                                          : Colors.white24,
-                                      width: 3)),
-                              child: Image(
-                                image:
-                                    AssetImage("assets/images/usergroup.png"),
-                                color: !myprof ? Colors.white : Colors.white24,
-                                width: 35,
-                                height: 35,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                    )
-                  ]),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (myprof) {
+                      setState(() {
+                        myprof = false;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: !myprof
+                            ? const Color(0xFF2757C5)
+                            : Colors.transparent,
+                        border: Border.all(
+                            color: !myprof ? Colors.white : Colors.white24,
+                            width: 3)),
+                    child: Image(
+                      image: const AssetImage("assets/images/usergroup.png"),
+                      color: !myprof ? Colors.white : Colors.white24,
+                      width: 35,
+                      height: 35,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ]),
+          ),
         ),
       ),
+      backgroundColor: const Color(0xff6991F1),
+      body: ListView(
+        children: [
+          Stack(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Image.asset(
+                  "assets/images/Group 10.png",
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(10),
+                child: myprof ? myProfile() : searchperson(context),
+              ),
+              const SizedBox(
+                height: 30.0,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
+  }
+
+  Widget myProfile() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: Text(
+            "My Profile",
+            style: roboto36white,
+          ),
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            GestureDetector(
+              child: const UserAvatar(),
+              onTap: () {
+                ImageScreen().showPicker(context);
+              },
+            ),
+            Container(
+              margin: const EdgeInsets.only(top: 20, left: 5),
+              child: const Text(
+                "Badges",
+                style: TextStyle(color: Colors.white, fontSize: 22),
+              ),
+            )
+          ],
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 6),
+          child: Text(
+            "Name",
+            style: roboto20white,
+          ),
+        ),
+        CustomTextField(
+          controller: nameController,
+        ),
+        const SizedBox(
+          height: 15.0,
+        ),
+        Container(
+          padding: const EdgeInsets.only(left: 6),
+          child: Text(
+            "College",
+            style: roboto20white,
+          ),
+        ),
+        CustomTextField(
+          controller: collegeController,
+        ),
+        const SizedBox(
+          height: 15.0,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Text(
+                        "Year",
+                        style: roboto20white,
+                      ),
+                    ),
+                    CustomTextField(controller: yearController)
+                  ]),
+            ),
+            Expanded(
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.only(left: 6),
+                      child: Text(
+                        "Department",
+                        style: roboto20white,
+                      ),
+                    ),
+                    CustomTextField(controller: deptController)
+                  ]),
+            )
+          ],
+        ),
+        const SizedBox(
+          height: 30,
+        ),
+        Center(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              ReusableButton(
+                onPressed: () {
+                  Map<String, dynamic> userData = {
+                    "College": collegeController.text,
+                    "Year": yearController.text,
+                    "Department": deptController.text,
+                    "Name": nameController.text,
+                    "Uid": FirebaseAuth.instance.currentUser!.uid,
+                  };
+                  CloudService().addUserInfo(userData);
+                },
+                text: "Save",
+              ),
+              ReusableButton(
+                text: "Add Badges",
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    builder: (context) => const AddBadgesSheet(),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget searchperson(BuildContext context) {
+    const String inviteLink = "";
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      const Center(
+        child: Text(
+          "Search User",
+          style: TextStyle(
+              color: Colors.white, fontSize: 36, fontWeight: FontWeight.w700),
+        ),
+      ),
+      const SizedBox(
+        height: 15.0,
+      ),
+      Container(
+        padding: const EdgeInsets.only(left: 6),
+        child: const Text(
+          "College",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+        ),
+      ),
+      TextfieldList(
+        controller: collegesearchController,
+        list: unilist,
+      ),
+      const SizedBox(
+        height: 15.0,
+      ),
+      Row(children: [
+        Expanded(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              padding: const EdgeInsets.only(left: 6),
+              child: const Text(
+                "Year",
+                style: TextStyle(
+                    fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+              ),
+            ),
+            TextfieldList(
+              controller: yearsearchController,
+              list: yearlist,
+            )
+          ]),
+        ),
+        Expanded(
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Container(
+              padding: const EdgeInsets.only(left: 6),
+              child: const Text(
+                "Department",
+                style: TextStyle(
+                    fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+              ),
+            ),
+            TextfieldList(
+              controller: deptsearchController,
+              list: deptlist,
+            )
+          ]),
+        ),
+      ]),
+      Container(
+        padding: const EdgeInsets.only(left: 6),
+        child: const Text(
+          "Class",
+          style: TextStyle(
+              fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+        ),
+      ),
+      const SizedBox(
+        height: 10,
+      ),
+      Container(
+        decoration: BoxDecoration(
+            borderRadius: borderRadius10,
+            color: Colors.white,
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 1.0, // soften the shadow
+                spreadRadius: 2, //extend the shadow
+                offset: Offset(
+                  0, // Move to right 10  horizontally
+                  0, // Move to bottom 10 Vertically
+                ),
+              )
+            ]),
+        height: 200,
+        child: ListView.builder(
+            shrinkWrap: false,
+            itemCount: userprof.length,
+            itemBuilder: (BuildContext context, int index) {
+              return UserCard(
+                  name: userprof[index].name, url: userprof[index].url);
+            }),
+        width: MediaQuery.of(context).size.width,
+      ),
+      const SizedBox(
+        height: 25,
+      ),
+      Column(
+        children: [
+          Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: borderRadius10,
+            ),
+            child: const Text(
+              inviteLink,
+              style: roboto18regular,
+            ),
+          ),
+          Center(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ReusableButton(
+                text: "Search",
+                onPressed: () async {
+                  getsearchlist(collegesearchController.text,
+                      yearsearchController.text, deptsearchController.text);
+                },
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              ReusableButton(
+                text: "Copy Invite Link",
+                onPressed: () async {
+                  await Clipboard.setData(
+                    const ClipboardData(text: inviteLink),
+                  );
+                },
+              ),
+            ],
+          )),
+        ],
+      ),
+    ]);
   }
 }
