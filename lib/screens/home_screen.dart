@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:classmates/components/badges.dart';
 import 'package:classmates/components/image_picker.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/components/user_avatar.dart';
@@ -44,7 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
         yearController.text = data['Year'];
         collegeController.text = data['College'];
         deptController.text = data['Department'];
-        Fluttertoast.showToast(msg: data['Name']);
+        Fluttertoast.showToast(
+          msg: data['Name'],
+        );
       });
     }
   }
@@ -171,13 +174,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 _image1 = ImageScreen().showPicker(context);
               },
             ),
-            Container(
-              margin: const EdgeInsets.only(top: 20, left: 5),
-              child: const Text(
-                "Badges",
-                style: TextStyle(color: Colors.white, fontSize: 22),
-              ),
-            )
+            Column(
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 20, left: 5),
+                  child: const Text(
+                    "Badges",
+                    style: TextStyle(color: Colors.white, fontSize: 22),
+                  ),
+                ),
+                // Badges(badgeList: badgeList,),
+              ],
+            ),
           ],
         ),
         Container(
@@ -210,32 +218,34 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Expanded(
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: Text(
-                        "Year",
-                        style: roboto20white,
-                      ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Text(
+                      "Year",
+                      style: roboto20white,
                     ),
-                    CustomTextField(controller: yearController)
-                  ]),
+                  ),
+                  CustomTextField(controller: yearController)
+                ],
+              ),
             ),
             Expanded(
               child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(left: 6),
-                      child: Text(
-                        "Department",
-                        style: roboto20white,
-                      ),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Text(
+                      "Department",
+                      style: roboto20white,
                     ),
-                    CustomTextField(controller: deptController)
-                  ]),
-            )
+                  ),
+                  CustomTextField(controller: deptController)
+                ],
+              ),
+            ),
           ],
         ),
         const SizedBox(
@@ -281,75 +291,78 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget searchperson(BuildContext context) {
-    const String inviteLink = "";
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      const Center(
-        child: Text(
-          "Search User",
-          style: TextStyle(
-              color: Colors.white, fontSize: 36, fontWeight: FontWeight.w700),
+    const String inviteLink = "shorturl.at/goxJV";
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Center(
+          child: Text(
+            "Search User",
+            style: roboto36white,
+          ),
         ),
-      ),
-      const SizedBox(
-        height: 15.0,
-      ),
-      Container(
-        padding: const EdgeInsets.only(left: 6),
-        child: const Text(
-          "College",
-          style: TextStyle(
-              fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+        const SizedBox(
+          height: 15.0,
         ),
-      ),
-      CustomTextField(
-        controller: collegesearchController,
-      ),
-      const SizedBox(
-        height: 15.0,
-      ),
-      Row(children: [
-        Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              padding: const EdgeInsets.only(left: 6),
-              child: const Text(
-                "Year",
-                style: TextStyle(
-                    fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+        Container(
+          padding: const EdgeInsets.only(left: 6),
+          child: Text(
+            "College",
+            style: roboto20white,
+          ),
+        ),
+        CustomTextField(
+          controller: collegesearchController,
+        ),
+        const SizedBox(
+          height: 15.0,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Text(
+                      "Year",
+                      style: roboto20white,
+                    ),
+                  ),
+                  CustomTextField(controller: yearsearchController)
+                ],
               ),
             ),
-            CustomTextField(controller: yearsearchController)
-          ]),
-        ),
-        Expanded(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Container(
-              padding: const EdgeInsets.only(left: 6),
-              child: const Text(
-                "Department",
-                style: TextStyle(
-                    fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.only(left: 6),
+                    child: Text(
+                      "Department",
+                      style: roboto20white,
+                    ),
+                  ),
+                  CustomTextField(controller: deptsearchController)
+                ],
               ),
             ),
-            CustomTextField(controller: deptsearchController)
-          ]),
+          ],
         ),
-      ]),
-      Container(
-        padding: const EdgeInsets.only(left: 6),
-        child: const Text(
-          "Class",
-          style: TextStyle(
-              fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+        Container(
+          padding: const EdgeInsets.only(left: 6),
+          child: Text(
+            "Class",
+            style: roboto20white,
+          ),
         ),
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      Container(
-        decoration: BoxDecoration(
+        const SizedBox(
+          height: 10,
+        ),
+        Container(
+          decoration: BoxDecoration(
             borderRadius: borderRadius10,
             color: Colors.white,
             boxShadow: const [
@@ -362,37 +375,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   0, // Move to bottom 10 Vertically
                 ),
               )
-            ]),
-        height: 200,
-        // width: 200,
-      ),
-      const SizedBox(
-        height: 25,
-      ),
-      Column(
-        children: [
-          Card(
-            elevation: 5,
-            shape: RoundedRectangleBorder(
-              borderRadius: borderRadius10,
-            ),
-            child: const Text(
-              inviteLink,
-              style: roboto18regular,
-            ),
+            ],
           ),
-          Center(
-            child: ReusableButton(
-              text: "Copy Invite Link",
-              onPressed: () async {
-                await Clipboard.setData(
-                  const ClipboardData(text: inviteLink),
-                );
-              },
-            ),
+          height: 200,
+          // width: 200,
+        ),
+        const SizedBox(
+          height: 25,
+        ),
+        Center(
+          child: ReusableButton(
+            text: "Copy Invite Link",
+            onPressed: () async {
+              await Clipboard.setData(
+                const ClipboardData(text: inviteLink),
+              );
+              Fluttertoast.showToast(msg: "Invite Link Copied");
+            },
           ),
-        ],
-      ),
-    ]);
+        ),
+      ],
+    );
   }
 }
