@@ -71,33 +71,6 @@ class WelcomeScreen extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 15.0),
-              Center(
-                child: SizedBox(
-                  width: 250.0,
-                  child: ReusableButton(
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          "assets/images/googleicon.png",
-                          fit: BoxFit.scaleDown,
-                          height: 30.0,
-                        ),
-                        const SizedBox(
-                          width: 20.0,
-                        ),
-                        Text(
-                          "Sign Up with Google",
-                          style: roboto18white,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 15.0,
-              ),
             ],
           )
         ],
