@@ -98,15 +98,15 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  getsearchlist(String College, String Year, String Dept) async {
+  getsearchlist(String college, String year, String dept) async {
     var docsnapshot = await FirebaseFirestore.instance
         .collection("Users")
         .where(
           "College",
-          isEqualTo: College,
+          isEqualTo: college,
         )
-        .where("Year", isEqualTo: Year)
-        .where("Department", isEqualTo: Dept)
+        .where("Year", isEqualTo: year)
+        .where("Department", isEqualTo: dept)
         .get();
     if (docsnapshot.docs.isNotEmpty) {
       setState(() {
@@ -360,7 +360,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget searchperson(BuildContext context) {
-    const String inviteLink = "shorturl.at/goxJV";
+    const String inviteLink = "shorturl.at/goxJV"; // this is a dummy url
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
