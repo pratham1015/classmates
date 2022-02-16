@@ -1,9 +1,8 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
-import 'dart:io';
-
 import 'package:classmates/components/image_picker.dart';
 import 'package:classmates/components/reusable_button.dart';
+import 'package:classmates/components/textfield_with_list.dart';
 import 'package:classmates/components/user_avatar.dart';
 import 'package:classmates/constants/constants.dart';
 import 'package:classmates/services/cloud_service.dart';
@@ -29,7 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController yearsearchController = TextEditingController();
   TextEditingController deptsearchController = TextEditingController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
-  late File _image1;
+  String? url;
+  List<String>? unilist = [];
+  List<String>? deptlist = [];
+  List<String>? yearlist = [];
 
   Widget searchperson(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -51,7 +53,8 @@ class _HomeScreenState extends State<HomeScreen> {
               fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
         ),
       ),
-      CustomTextField(
+      TextfieldList(
+        list: unilist,
         controller: collegesearchController,
       ),
       SizedBox(
@@ -69,7 +72,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
               ),
             ),
-            CustomTextField(controller: yearsearchController)
+            TextfieldList(
+              controller: yearsearchController,
+              list: yearlist,
+            )
           ]),
         ),
         Expanded(
@@ -83,7 +89,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
               ),
             ),
-            CustomTextField(controller: deptsearchController)
+            TextfieldList(
+              controller: deptsearchController,
+              list: deptlist,
+            )
           ]),
         ),
       ]),
@@ -120,8 +129,21 @@ class _HomeScreenState extends State<HomeScreen> {
         height: 25,
       ),
       Center(
-        child: ReusableButton(
-          text: "Invite",
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ReusableButton(
+              onPressed: () {
+                getsearchlist(collegesearchController.text,
+                    yearsearchController.text, deptsearchController.text);
+              },
+              text: "Search",
+            ),
+            ReusableButton(
+              // onPressed: () => showBottomSheet(context: context, builder: ),
+              text: "Invite",
+            ),
+          ],
         ),
       ),
     ]);
@@ -142,9 +164,11 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
-              child: UserAvatar(),
+              child: UserAvatar(
+                profilePic: url,
+              ),
               onTap: () {
-                _image1 = ImageScreen().showPicker(context);
+                ImageScreen().showPicker(context);
               },
             ),
             Container(
@@ -262,10 +286,73 @@ class _HomeScreenState extends State<HomeScreen> {
     if (docSnapshot.exists) {
       setState(() {
         Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
-        nameController.text = data['Name'];
-        yearController.text = data['Year'];
-        collegeController.text = data['College'];
-        deptController.text = data['Department'];
+        if (data.containsKey("Name")) nameController.text = data['Name'];
+        if (data.containsKey("Year")) yearController.text = data['Year'];
+        if (data.containsKey("College")) {
+          collegeController.text = data['College'];
+        }
+        if (data.containsKey("Department")) {
+          deptController.text = data['Department'];
+        }
+        if (data.containsKey("image1url")) url = data['image1url'];
+      });
+    }
+  }
+
+  getlist() async {
+    var list = await FirebaseFirestore.instance
+        .collection("CollegeList")
+        .doc("evwEgeh5wLuTMclucINh")
+        .get();
+    if (list.exists) {
+      Map<String, dynamic>? data = list.data();
+      setState(() {
+        for (int i = 0; i < data!['list'].length; i++) {
+          unilist?.add(data['list'][i]);
+        }
+      });
+    }
+
+    var list2 = await FirebaseFirestore.instance
+        .collection("DepartmentList")
+        .doc("dept")
+        .get();
+    if (list2.exists) {
+      Map<String, dynamic>? data = list2.data();
+      setState(() {
+        for (int i = 0; i < data!['deptlist'].length; i++) {
+          deptlist?.add(data['deptlist'][i]);
+        }
+      });
+    }
+
+    var list3 = await FirebaseFirestore.instance
+        .collection("YearList")
+        .doc("yearlist")
+        .get();
+    if (list3.exists) {
+      Map<String, dynamic>? data = list3.data();
+      setState(() {
+        for (int i = 0; i < data!['yearlist'].length; i++) {
+          yearlist?.add(data['yearlist'][i]);
+        }
+      });
+    }
+  }
+
+  getsearchlist(String College, String Year, String Dept) async {
+    var docsnapshot = await FirebaseFirestore.instance
+        .collection("Users")
+        .where(
+          "College",
+          isEqualTo: College,
+        )
+        .where("Year", isEqualTo: Year)
+        .where("Department", isEqualTo: Dept)
+        .get();
+    if (docsnapshot.docs.isNotEmpty) {
+      setState(() {
+        Map<String, dynamic> data = docsnapshot.docs.first.data();
         Fluttertoast.showToast(msg: data['Name']);
       });
     }
@@ -274,6 +361,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     getMyInfo();
+    getlist();
     super.initState();
   }
 
@@ -285,7 +373,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
         child: Container(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
           width: MediaQuery.of(context).size.width,
           child: Stack(children: [
             Image.asset(

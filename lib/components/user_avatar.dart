@@ -9,26 +9,32 @@ class UserAvatar extends StatelessWidget {
   final String? profilePic;
 
   @override
-  Widget build(BuildContext context) => Padding(
-        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 5)),
-              child: CircleAvatar(
-                radius: 58,
-                backgroundImage: AssetImage("assets/images/profile.png"),
-              ),
-            ),
-            profilePic != null
-                ? CircleAvatar(
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+      child: Stack(
+        children: [
+          profilePic == null
+              ? Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 5)),
+                  child: CircleAvatar(
+                    radius: 58,
+                    backgroundImage: AssetImage("assets/images/profile.png"),
+                  ),
+                )
+              : Container(
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white, width: 5)),
+                  child: CircleAvatar(
                     radius: 58,
                     backgroundImage: NetworkImage(profilePic!),
-                  )
-                : Container(),
-          ],
-        ),
-      );
+                  ),
+                )
+        ],
+      ),
+    );
+  }
 }
