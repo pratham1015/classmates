@@ -2,8 +2,10 @@ import 'package:classmates/components/back_button.dart';
 import 'package:classmates/components/custom_textfield.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/constants/constants.dart';
+import 'package:classmates/screens/home_screen.dart';
 import 'package:classmates/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class SignupScreen extends StatelessWidget {
@@ -73,14 +75,23 @@ class SignupScreen extends StatelessWidget {
                   child: ReusableButton(
                     text: "Register",
                     onPressed: () async {
-                      await authService.createUserWithEmailAndPassword(
-                          emailController.text, passwordController.text);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => [App Screen],
-                      //   ),
-                      // );
+                      try {
+                        await authService
+                            .createUserWithEmailAndPassword(context,
+                                emailController.text, passwordController.text)
+                            .then((value) {
+                          Fluttertoast.showToast(
+                              msg: "Account created successfully");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        });
+                      } on Exception catch (error) {
+                        Fluttertoast.showToast(msg: error.toString());
+                      }
                     },
                   ),
                 )

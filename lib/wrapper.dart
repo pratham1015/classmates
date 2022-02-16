@@ -17,7 +17,7 @@ class Wrapper extends StatelessWidget {
       builder: (_, AsyncSnapshot<User?> snapshot) {
         if (snapshot.connectionState == ConnectionState.active) {
           final User? user = snapshot.data;
-          return user == null ? const WelcomeScreen() : HomeScreen();
+          return user == null ? const WelcomeScreen() : const HomeScreen();
         } else {
           return const Scaffold(
             body: Center(

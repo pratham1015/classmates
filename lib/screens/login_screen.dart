@@ -2,16 +2,18 @@ import 'package:classmates/components/back_button.dart';
 import 'package:classmates/components/custom_textfield.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/constants/constants.dart';
-import 'package:classmates/screens/home_screen.dart';
-import 'package:classmates/screens/sheets/forgot_password_sheet.dart';
 import 'package:classmates/services/auth_services.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     TextEditingController emailController = TextEditingController();
@@ -88,8 +90,72 @@ class LoginScreen extends StatelessWidget {
                             TextEditingController emailController =
                                 TextEditingController();
 
-                            return ForgotPasswordSheet(
-                                emailController: emailController);
+                            return Padding(
+                              padding: MediaQuery.of(context).viewInsets,
+                              child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.35,
+                                padding: const EdgeInsets.all(12.0),
+                                child: Center(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      const Center(
+                                        child: Text(
+                                          "Send Password Reset Email",
+                                          style: TextStyle(
+                                            fontFamily: 'Roboto',
+                                            fontSize: 24,
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      const Text(
+                                        "Email",
+                                        style: roboto18regular,
+                                      ),
+                                      CustomTextField(
+                                        controller: emailController,
+                                        autofocus: true,
+                                      ),
+                                      const SizedBox(
+                                        height: 20.0,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            },
+                                            child: Center(
+                                              child: Text(
+                                                "Dismiss",
+                                                style: roboto18bold,
+                                              ),
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            width: 200,
+                                            child: ReusableButton(
+                                              text: "Reset Password",
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            );
                           },
                         );
                       },
@@ -107,18 +173,35 @@ class LoginScreen extends StatelessWidget {
                   child: ReusableButton(
                     text: "Login",
                     onPressed: () async {
-                      await authService
-                          .signInWithEmailAndPassword(
-                              emailController.text, passwordController.text)
-                          .whenComplete(() {
-                        Fluttertoast.showToast(msg: "Login Success");
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => HomeScreen(),
-                          ),
-                        );
-                      });
+<<<<<<< Updated upstream
+                      await authService.signInWithEmailAndPassword(
+                          emailController.text, passwordController.text);
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => [App Screen],
+                      //   ),
+                      // );
+=======
+                      try {
+                        await authService
+                            .signInWithEmailAndPassword(
+                                context,
+                                emailController.text.trim(),
+                                passwordController.text.trim())
+                            .then((value) {
+                          Fluttertoast.showToast(msg: "Signed In Sucessfully");
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ),
+                          );
+                        });
+                      } on Exception catch (error) {
+                        Fluttertoast.showToast(msg: error.toString());
+                      }
+>>>>>>> Stashed changes
                     },
                   ),
                 ),

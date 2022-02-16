@@ -1,7 +1,6 @@
 import 'package:classmates/constants/constants.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
 class ReusableButton extends StatelessWidget {
   final String? text;
   final Color? color;
@@ -28,7 +27,7 @@ class ReusableButton extends StatelessWidget {
             end: Alignment.bottomCenter,
           ),
         ),
-        width: 150,
+        width: 150.0,
         height: 45.0,
         child: Center(
           child: child ??

@@ -35,28 +35,39 @@ class WelcomeScreen extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  ReusableButton(
-                    text: "Login",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const LoginScreen(),
-                        ),
-                      );
-                    },
+                  const Spacer(),
+                  Expanded(
+                    flex: 8,
+                    child: ReusableButton(
+                      text: "Login",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginScreen(),
+                          ),
+                        );
+                      },
+                    ),
                   ),
-                  ReusableButton(
-                    text: "Sign Up",
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SignupScreen(),
-                        ),
-                      );
-                    },
+                  const Spacer(
+                    flex: 2,
                   ),
+                  Expanded(
+                    flex: 8,
+                    child: ReusableButton(
+                      text: "Sign Up",
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SignupScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const Spacer(),
                 ],
               ),
               const SizedBox(height: 15.0),
@@ -77,14 +88,15 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                         Text(
                           "Sign Up with Google",
-                          style: roboto18white,
+                          style: roboto18bold.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 15.0),
+              )
             ],
           )
         ],
