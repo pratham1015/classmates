@@ -2,8 +2,10 @@ import 'package:classmates/components/back_button.dart';
 import 'package:classmates/components/custom_textfield.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/constants/constants.dart';
+import 'package:classmates/screens/home_screen.dart';
 import 'package:classmates/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -168,14 +170,18 @@ class LoginScreen extends StatelessWidget {
                   child: ReusableButton(
                     text: "Login",
                     onPressed: () async {
-                      await authService.signInWithEmailAndPassword(
-                          emailController.text, passwordController.text);
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => [App Screen],
-                      //   ),
-                      // );
+                      await authService
+                          .signInWithEmailAndPassword(
+                              emailController.text, passwordController.text)
+                          .whenComplete(() {
+                        Fluttertoast.showToast(msg: "Login Success");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HomeScreen(),
+                          ),
+                        );
+                      });
                     },
                   ),
                 ),

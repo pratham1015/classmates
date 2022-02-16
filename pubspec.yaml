@@ -37,6 +37,8 @@ dependencies:
   firebase_core: ^1.12.0
   firebase_auth: ^3.3.7
   provider: ^6.0.2
+  fluttertoast:
+  toggle_switch: ^1.4.0
 
 dev_dependencies:
   flutter_test:

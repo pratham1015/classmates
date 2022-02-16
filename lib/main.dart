@@ -25,6 +25,7 @@ class MyApp extends StatelessWidget {
         )
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Classmates',
         theme: ThemeData.light(),
         home: const WelcomeScreen(),

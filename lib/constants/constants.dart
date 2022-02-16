@@ -8,5 +8,6 @@ TextStyle roboto18bold = roboto18regular.copyWith(
   fontWeight: FontWeight.w700,
 );
 TextStyle roboto36bold = roboto18bold.copyWith(fontSize: 36);
+TextStyle roboto18white = roboto18regular.copyWith(color: Colors.white);
 
 BorderRadius borderRadius10 = BorderRadius.circular(10.0);
