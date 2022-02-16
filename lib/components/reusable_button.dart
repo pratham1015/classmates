@@ -33,9 +33,7 @@ class ReusableButton extends StatelessWidget {
           child: child ??
               Text(
                 text!,
-                style: roboto18bold.copyWith(
-                  color: color ?? Colors.white,
-                ),
+                style: roboto18white,
               ),
         ),
       ),

@@ -25,6 +25,7 @@ class CustomTextField extends StatelessWidget {
         autofocus: autofocus ?? false,
         obscureText: isObscure ?? false,
         decoration: InputDecoration(
+          isDense: true,
           border: OutlineInputBorder(
             borderRadius: borderRadius10,
           ),

@@ -46,7 +46,7 @@ class AuthService {
   Future<void> sendPasswordResetEmail(
       BuildContext context, String email) async {
     showCircularProgressIndicator(context);
-    await _firebaseAuth
+    return await _firebaseAuth
         .sendPasswordResetEmail(email: email)
         .whenComplete(() => Navigator.of(context).pop());
   }

@@ -72,19 +72,22 @@ class ForgotPasswordSheet extends StatelessWidget {
                     width: 200,
                     child: ReusableButton(
                       text: "Reset Password",
-                      onPressed: () {
-                        authService
-                            .sendPasswordResetEmail(
-                                context, emailController.text)
-                            .then(
-                              (_) => Fluttertoast.showToast(
-                                msg: "Password Reset Mail Sent",
-                              ),
-                            )
-                            .onError(
-                                (error, stackTrace) => Fluttertoast.showToast(
-                                      msg: error.toString(),
-                                    ));
+                      onPressed: () async {
+                        try {
+                          await authService
+                              .sendPasswordResetEmail(
+                                  context, emailController.text)
+                              .then(
+                                (_) => Fluttertoast.showToast(
+                                  msg: "Password Reset Mail Sent",
+                                ),
+                              );
+                          Navigator.pop(context);
+                        } on Exception catch (error) {
+                          Fluttertoast.showToast(
+                            msg: error.toString(),
+                          );
+                        }
                       },
                     ),
                   ),

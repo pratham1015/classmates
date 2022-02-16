@@ -3,10 +3,12 @@ import 'package:classmates/components/image_picker.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/components/user_avatar.dart';
 import 'package:classmates/constants/constants.dart';
+import 'package:classmates/screens/sheets/add_badges_sheet.dart';
 import 'package:classmates/services/cloud_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:classmates/components/custom_textfield.dart';
 
@@ -25,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController collegesearchController = TextEditingController();
   TextEditingController yearsearchController = TextEditingController();
   TextEditingController deptsearchController = TextEditingController();
+  TextEditingController inviteController = TextEditingController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
   late File _image1;
 
@@ -55,103 +58,96 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff6991F1),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        child: Container(
-          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-          child: Stack(children: [
-            SizedBox(
-              width: MediaQuery.of(context).size.width,
-              child: Image.asset(
-                "assets/images/Group 10.png",
-                fit: BoxFit.fitWidth,
-              ),
-            ),
-            Container(
-              margin: const EdgeInsets.all(10),
-              child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    myprof ? myProfile() : searchperson(context),
-                    const SizedBox(
-                      height: 30,
+      bottomNavigationBar: SizedBox(
+        height: 75.0,
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 10.0),
+          child: Center(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    if (!myprof) {
+                      setState(() {
+                        myprof = true;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        color: myprof
+                            ? const Color(0xFF2757C5)
+                            : Colors.transparent,
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                            color: myprof ? Colors.white : Colors.white24,
+                            width: 3)),
+                    child: Image(
+                      image: const AssetImage("assets/images/user.png"),
+                      color: myprof ? Colors.white : Colors.white24,
+                      width: 35,
+                      height: 35,
                     ),
-                    Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Center(
-                          child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              if (!myprof) {
-                                setState(() {
-                                  myprof = true;
-                                });
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: myprof
-                                      ? const Color(0xFF2757C5)
-                                      : Colors.transparent,
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: myprof
-                                          ? Colors.white
-                                          : Colors.white24,
-                                      width: 3)),
-                              child: Image(
-                                image:
-                                    const AssetImage("assets/images/user.png"),
-                                color: myprof ? Colors.white : Colors.white24,
-                                width: 35,
-                                height: 35,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 20,
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              if (myprof) {
-                                setState(() {
-                                  myprof = false;
-                                });
-                              }
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: !myprof
-                                      ? const Color(0xFF2757C5)
-                                      : Colors.transparent,
-                                  border: Border.all(
-                                      color: !myprof
-                                          ? Colors.white
-                                          : Colors.white24,
-                                      width: 3)),
-                              child: Image(
-                                image: const AssetImage(
-                                    "assets/images/usergroup.png"),
-                                color: !myprof ? Colors.white : Colors.white24,
-                                width: 35,
-                                height: 35,
-                              ),
-                            ),
-                          ),
-                        ],
-                      )),
-                    )
-                  ]),
+                  ),
+                ),
+                const SizedBox(
+                  width: 10.0,
+                ),
+                GestureDetector(
+                  onTap: () {
+                    if (myprof) {
+                      setState(() {
+                        myprof = false;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: !myprof
+                            ? const Color(0xFF2757C5)
+                            : Colors.transparent,
+                        border: Border.all(
+                            color: !myprof ? Colors.white : Colors.white24,
+                            width: 3)),
+                    child: Image(
+                      image: const AssetImage("assets/images/usergroup.png"),
+                      color: !myprof ? Colors.white : Colors.white24,
+                      width: 35,
+                      height: 35,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ]),
+          ),
         ),
+      ),
+      backgroundColor: const Color(0xff6991F1),
+      body: ListView(
+        children: [
+          Stack(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Image.asset(
+                  "assets/images/Group 10.png",
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.all(10),
+                child: myprof ? myProfile() : searchperson(context),
+              ),
+              const SizedBox(
+                height: 30.0,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -160,11 +156,10 @@ class _HomeScreenState extends State<HomeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Center(
+        Center(
           child: Text(
             "My Profile",
-            style: TextStyle(
-                color: Colors.white, fontSize: 36, fontWeight: FontWeight.w700),
+            style: roboto36white,
           ),
         ),
         Row(
@@ -187,10 +182,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Container(
           padding: const EdgeInsets.only(left: 6),
-          child: const Text(
+          child: Text(
             "Name",
-            style: TextStyle(
-                fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+            style: roboto20white,
           ),
         ),
         CustomTextField(
@@ -201,10 +195,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         Container(
           padding: const EdgeInsets.only(left: 6),
-          child: const Text(
+          child: Text(
             "College",
-            style: TextStyle(
-                fontFamily: 'Roboto', fontSize: 20, color: Colors.white),
+            style: roboto20white,
           ),
         ),
         CustomTextField(
@@ -221,12 +214,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(left: 6),
-                      child: const Text(
+                      child: Text(
                         "Year",
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 20,
-                            color: Colors.white),
+                        style: roboto20white,
                       ),
                     ),
                     CustomTextField(controller: yearController)
@@ -238,12 +228,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(left: 6),
-                      child: const Text(
+                      child: Text(
                         "Department",
-                        style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 20,
-                            color: Colors.white),
+                        style: roboto20white,
                       ),
                     ),
                     CustomTextField(controller: deptController)
@@ -271,9 +258,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 text: "Save",
               ),
-              const ReusableButton(
-                // onPressed: () => showBottomSheet(context: context, builder: ),
+              ReusableButton(
                 text: "Add Badges",
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20.0),
+                        topRight: Radius.circular(20.0),
+                      ),
+                    ),
+                    builder: (context) => const AddBadgesSheet(),
+                  );
+                },
               ),
             ],
           ),
@@ -283,6 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget searchperson(BuildContext context) {
+    const String inviteLink = "";
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
       const Center(
         child: Text(
@@ -370,10 +369,29 @@ class _HomeScreenState extends State<HomeScreen> {
       const SizedBox(
         height: 25,
       ),
-      const Center(
-        child: ReusableButton(
-          text: "Invite",
-        ),
+      Column(
+        children: [
+          Card(
+            elevation: 5,
+            shape: RoundedRectangleBorder(
+              borderRadius: borderRadius10,
+            ),
+            child: const Text(
+              inviteLink,
+              style: roboto18regular,
+            ),
+          ),
+          Center(
+            child: ReusableButton(
+              text: "Copy Invite Link",
+              onPressed: () async {
+                await Clipboard.setData(
+                  const ClipboardData(text: inviteLink),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     ]);
   }

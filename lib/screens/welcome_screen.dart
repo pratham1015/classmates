@@ -17,7 +17,7 @@ class WelcomeScreen extends StatelessWidget {
             fit: BoxFit.fitWidth,
           ),
           Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 "Classmates",
@@ -88,15 +88,16 @@ class WelcomeScreen extends StatelessWidget {
                         ),
                         Text(
                           "Sign Up with Google",
-                          style: roboto18bold.copyWith(
-                            color: Colors.white,
-                          ),
+                          style: roboto18white,
                         ),
                       ],
                     ),
                   ),
                 ),
-              )
+              ),
+              const SizedBox(
+                height: 15.0,
+              ),
             ],
           )
         ],
