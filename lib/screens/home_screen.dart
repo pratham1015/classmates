@@ -1,9 +1,16 @@
 // ignore_for_file: prefer_const_constructors_in_immutables, prefer_const_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
+import 'dart:io';
+
+import 'package:classmates/components/image_picker.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/components/user_avatar.dart';
 import 'package:classmates/constants/constants.dart';
+import 'package:classmates/services/cloud_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import '../components/custom_textfield.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -21,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController collegesearchController = TextEditingController();
   TextEditingController yearsearchController = TextEditingController();
   TextEditingController deptsearchController = TextEditingController();
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+  late File _image1;
 
   Widget searchperson(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -132,7 +141,12 @@ class _HomeScreenState extends State<HomeScreen> {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserAvatar(),
+            GestureDetector(
+              child: UserAvatar(),
+              onTap: () {
+                _image1 = ImageScreen().showPicker(context);
+              },
+            ),
             Container(
               margin: EdgeInsets.only(top: 20, left: 5),
               child: Text(
@@ -216,6 +230,16 @@ class _HomeScreenState extends State<HomeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ReusableButton(
+                onPressed: () {
+                  Map<String, dynamic> userData = {
+                    "College": collegeController.text,
+                    "Year": yearController.text,
+                    "Department": deptController.text,
+                    "Name": nameController.text,
+                    "Uid": FirebaseAuth.instance.currentUser!.uid,
+                  };
+                  CloudService().addUserInfo(userData);
+                },
                 text: "Save",
               ),
               ReusableButton(
@@ -229,15 +253,40 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  DocumentReference docref = FirebaseFirestore.instance
+      .collection("Users")
+      .doc(FirebaseAuth.instance.currentUser!.uid);
+
+  getMyInfo() async {
+    var docSnapshot = await docref.get();
+    if (docSnapshot.exists) {
+      setState(() {
+        Map<String, dynamic> data = docSnapshot.data() as Map<String, dynamic>;
+        nameController.text = data['Name'];
+        yearController.text = data['Year'];
+        collegeController.text = data['College'];
+        deptController.text = data['Department'];
+        Fluttertoast.showToast(msg: data['Name']);
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    getMyInfo();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // bottomNavigationBar: ,
       backgroundColor: Color(0xff6991F1),
       body: SingleChildScrollView(
         padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
-        child: SizedBox(
-          height: MediaQuery.of(context).size.height -
-              MediaQuery.of(context).padding.top,
+        child: Container(
+          padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+          width: MediaQuery.of(context).size.width,
           child: Stack(children: [
             Image.asset(
               "assets/images/Group 10.png",

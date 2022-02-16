@@ -24,7 +24,7 @@ class TextfieldList extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.2,
+                  // width: MediaQuery.of(context).size.width * 0.2,
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
                       focusColor: Colors.transparent,
