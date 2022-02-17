@@ -22,7 +22,7 @@ class UserCard extends StatelessWidget {
                 name!,
                 style: const TextStyle(fontSize: 20),
               ),
-              const Text("No Skills")
+              const Text("Tap to view skills")
             ],
           )
         ],

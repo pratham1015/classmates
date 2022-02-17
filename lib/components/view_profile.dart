@@ -1,18 +1,28 @@
-import 'package:classmates/components/image_picker.dart';
+import 'package:classmates/components/badges.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/components/user_avatar.dart';
 import 'package:classmates/constants/constants.dart';
 import 'package:flutter/material.dart';
 
 class ViewProfile extends StatelessWidget {
-  const ViewProfile({Key? key, this.name, this.college, this.year, this.dept})
+  ViewProfile(
+      {Key? key,
+      this.name,
+      this.college,
+      this.year,
+      this.dept,
+      this.uid,
+      required this.badges,
+      this.url})
       : super(key: key);
 
-  final dynamic name, college, year, dept;
+  final dynamic name, college, year, dept, url, uid;
+  List<String> badges;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+        body: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Center(
@@ -24,11 +34,8 @@ class ViewProfile extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              child: const UserAvatar(),
-              onTap: () {
-                ImageScreen().showPicker(context);
-              },
+            UserAvatar(
+              profilePic: url,
             ),
             Column(
               children: [
@@ -39,7 +46,7 @@ class ViewProfile extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 22),
                   ),
                 ),
-                // Badges(badgeList: badgeList,),
+                Badges(badgeList: badges),
               ],
             ),
           ],
@@ -148,6 +155,6 @@ class ViewProfile extends StatelessWidget {
           ),
         ),
       ],
-    );
+    ));
   }
 }

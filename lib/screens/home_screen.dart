@@ -1,7 +1,10 @@
 import 'package:classmates/components/badges.dart';
 import 'package:classmates/components/image_picker.dart';
 import 'package:classmates/components/reusable_button.dart';
+import 'package:classmates/components/textfield_with_list.dart';
 import 'package:classmates/components/user_avatar.dart';
+import 'package:classmates/components/user_display_card.dart';
+import 'package:classmates/components/view_profile.dart';
 import 'package:classmates/constants/constants.dart';
 import 'package:classmates/models/user_model.dart';
 import 'package:classmates/screens/sheets/add_badges_sheet.dart';
@@ -31,9 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController inviteController = TextEditingController();
   String uid = FirebaseAuth.instance.currentUser!.uid;
   String? url;
-  List<String>? unilist = [];
-  List<String>? deptlist = [];
-  List<String>? yearlist = [];
+  List<String> unilist = [];
+  List<String> deptlist = [];
+  List<String> yearlist = [];
   List<Userprofile> userprof = [];
   List<String> myskills = [];
 
@@ -54,7 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
         if (data.containsKey("Department")) {
           deptController.text = data['Department'];
         }
-        if (data.containsKey("image1url")) url = data['image1url'];
+        if (data.containsKey("image1url")) {
+          url = data['image1url'];
+        }
         if (data.containsKey("Skills")) {
           for (int i = 0; i < data['Skills'].length; i++) {
             myskills.add(data['Skills'][i]);
@@ -73,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Map<String, dynamic>? data = list.data();
       setState(() {
         for (int i = 0; i < data!['list'].length; i++) {
-          unilist?.add(data['list'][i]);
+          unilist.add(data['list'][i]);
         }
       });
     }
@@ -86,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Map<String, dynamic>? data = list2.data();
       setState(() {
         for (int i = 0; i < data!['deptlist'].length; i++) {
-          deptlist?.add(data['deptlist'][i]);
+          deptlist.add(data['deptlist'][i]);
         }
       });
     }
@@ -99,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
       Map<String, dynamic>? data = list3.data();
       setState(() {
         for (int i = 0; i < data!['yearlist'].length; i++) {
-          yearlist?.add(data['yearlist'][i]);
+          yearlist.add(data['yearlist'][i]);
         }
       });
     }
@@ -110,19 +115,29 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection("Users")
         .where(
           "College",
-          isEqualTo: college,
+          whereIn: [college, ""],
         )
-        .where("Year", isEqualTo: year)
+        .where(
+          "Year",
+          isEqualTo: year,
+        )
         .where("Department", isEqualTo: dept)
         .get();
     if (docsnapshot.docs.isNotEmpty) {
       setState(() {
         for (int i = 0; i < docsnapshot.docs.length; i++) {
+          List<String> temp = [];
+          for (int j = 0;
+              j < docsnapshot.docs.elementAt(i).data()['Skills'].length;
+              j++) {
+            temp.add(docsnapshot.docs.elementAt(i).data()['Skills'][i]);
+          }
           userprof.add(Userprofile(
               docsnapshot.docs.elementAt(i).data()['image1url'],
               docsnapshot.docs.elementAt(i).data()['Name'],
-              docsnapshot.docs.elementAt(i).data()['Skills']));
+              temp));
         }
+        Fluttertoast.showToast(msg: userprof.length.toString() + "users found");
       });
     }
   }
@@ -245,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
-              child: const UserAvatar(),
+              child: UserAvatar(profilePic: url),
               onTap: () {
                 ImageScreen().showPicker(context);
               },
@@ -286,7 +301,8 @@ class _HomeScreenState extends State<HomeScreen> {
             style: roboto20white,
           ),
         ),
-        CustomTextField(
+        TextfieldList(
+          list: unilist,
           controller: collegeController,
         ),
         const SizedBox(
@@ -305,7 +321,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: roboto20white,
                     ),
                   ),
-                  CustomTextField(controller: yearController)
+                  TextfieldList(list: yearlist, controller: yearController)
                 ],
               ),
             ),
@@ -320,7 +336,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: roboto20white,
                     ),
                   ),
-                  CustomTextField(controller: deptController)
+                  TextfieldList(list: deptlist, controller: deptController)
                 ],
               ),
             ),
@@ -390,7 +406,8 @@ class _HomeScreenState extends State<HomeScreen> {
             style: roboto20white,
           ),
         ),
-        CustomTextField(
+        TextfieldList(
+          list: unilist,
           controller: collegesearchController,
         ),
         const SizedBox(
@@ -409,7 +426,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: roboto20white,
                     ),
                   ),
-                  CustomTextField(controller: yearsearchController)
+                  TextfieldList(
+                      list: yearlist, controller: yearsearchController)
                 ],
               ),
             ),
@@ -424,7 +442,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       style: roboto20white,
                     ),
                   ),
-                  CustomTextField(controller: deptsearchController)
+                  TextfieldList(
+                      list: deptlist, controller: deptsearchController)
                 ],
               ),
             ),
@@ -441,24 +460,47 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 10,
         ),
         Container(
-          decoration: BoxDecoration(
-            borderRadius: borderRadius10,
-            color: Colors.white,
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                blurRadius: 1.0, // soften the shadow
-                spreadRadius: 2, //extend the shadow
-                offset: Offset(
-                  0, // Move to right 10  horizontally
-                  0, // Move to bottom 10 Vertically
-                ),
-              )
-            ],
-          ),
-          height: 200,
-          // width: 200,
-        ),
+            decoration: BoxDecoration(
+              borderRadius: borderRadius10,
+              color: Colors.white,
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 1.0, // soften the shadow
+                  spreadRadius: 2, //extend the shadow
+                  offset: Offset(
+                    0, // Move to right 10  horizontally
+                    0, // Move to bottom 10 Vertically
+                  ),
+                )
+              ],
+            ),
+            height: 200,
+            child: ListView.builder(
+                itemCount: userprof.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: ((context) => ViewProfile(
+                                    name: userprof.elementAt(index).name,
+                                    url: userprof.elementAt(index).url,
+                                    college: collegesearchController.text,
+                                    year: yearsearchController.text,
+                                    dept: deptController.text,
+                                    badges: userprof.elementAt(index).skills,
+                                    // badgelist: userprof.elementAt(index).skills,
+                                  ))));
+                    },
+                    child: UserCard(
+                        name: userprof.elementAt(index).name,
+                        url: userprof.elementAt(index).url),
+                  );
+                })
+            // width: 200,
+            ),
         const SizedBox(
           height: 25,
         ),

@@ -62,7 +62,7 @@ class ImageScreen {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => const HomeScreen(),
+            builder: (context) => HomeScreen(),
           ),
         );
       }).catchError((error, stackTrace) {

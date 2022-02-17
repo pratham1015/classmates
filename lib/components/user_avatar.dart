@@ -16,23 +16,22 @@ class UserAvatar extends StatelessWidget {
         children: [
           profilePic == null
               ? Container(
+                  width: 120,
+                  height: 120.0,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 5)),
-                  child: CircleAvatar(
-                    radius: 58,
-                    backgroundImage: AssetImage("assets/images/profile.png"),
-                  ),
-                )
+                      border: Border.all(color: Colors.white, width: 5),
+                      image: DecorationImage(
+                          fit: BoxFit.fill,
+                          image: AssetImage("assets/images/profile.png"))))
               : Container(
+                  width: 120,
+                  height: 120.0,
                   decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: Colors.white, width: 5)),
-                  child: CircleAvatar(
-                    radius: 58,
-                    backgroundImage: NetworkImage(profilePic!),
-                  ),
-                )
+                      border: Border.all(color: Colors.white, width: 5),
+                      image: DecorationImage(
+                          fit: BoxFit.fill, image: NetworkImage(profilePic!))))
         ],
       ),
     );

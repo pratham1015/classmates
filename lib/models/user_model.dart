@@ -8,7 +8,7 @@ class User {
 class Userprofile {
   final String? url;
   final String? name;
-  final List<String>? skills;
+  final List<String> skills;
 
   Userprofile(this.url, this.name, this.skills);
 }
