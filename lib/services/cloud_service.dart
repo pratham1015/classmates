@@ -31,12 +31,12 @@ class CloudService {
     });
   }
 
-  getsearchlist(String College, String Year, String Dept) {
+  getsearchlist(String college, String year, String dept) {
     FirebaseFirestore.instance
         .collection("Users")
-        .where("College", isEqualTo: College)
-        .where("Year", isEqualTo: Year)
-        .where("Department", isEqualTo: Dept)
+        .where("College", isEqualTo: college)
+        .where("Year", isEqualTo: year)
+        .where("Department", isEqualTo: dept)
         .get();
   }
 

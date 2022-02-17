@@ -33,7 +33,7 @@ class ImageScreen {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
       }).catchError((error, stackTrace) {
@@ -62,7 +62,7 @@ class ImageScreen {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (context) => HomeScreen(),
+            builder: (context) => const HomeScreen(),
           ),
         );
       }).catchError((error, stackTrace) {
@@ -80,7 +80,7 @@ class ImageScreen {
               children: <Widget>[
                 ListTile(
                     leading: const Icon(Icons.photo_library,
-                        color: const Color(0xfffd297b)),
+                        color: Color(0xfffd297b)),
                     title: const Text(
                       'Photo Library',
                       style: TextStyle(color: Colors.black),

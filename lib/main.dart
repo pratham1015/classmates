@@ -1,4 +1,3 @@
-import 'package:classmates/screens/welcome_screen.dart';
 import 'package:classmates/services/auth_services.dart';
 import 'package:classmates/wrapper.dart';
 import 'package:firebase_core/firebase_core.dart';

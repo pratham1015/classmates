@@ -1,5 +1,4 @@
 import 'package:classmates/components/reusable_button.dart';
-import 'package:classmates/constants/constants.dart';
 import 'package:classmates/screens/login_screen.dart';
 import 'package:classmates/screens/signup_screen.dart';
 import 'package:flutter/material.dart';

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class TextfieldList extends StatelessWidget {
   final TextEditingController controller;
-  final list;
+  final List<String> list;
   const TextfieldList({
     Key? key,
     required this.list,
@@ -12,7 +12,6 @@ class TextfieldList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var items = List.generate(10, (index) => index.toString());
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(0.0),
@@ -50,7 +49,6 @@ class TextfieldList extends StatelessWidget {
                 child: Align(
                   alignment: Alignment.centerRight,
                   child: SizedBox(
-                    // width: MediaQuery.of(context).size.width * 0.8,
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         focusColor: Colors.white,

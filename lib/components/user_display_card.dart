@@ -2,11 +2,10 @@ import 'package:classmates/components/user_avatar.dart';
 import 'package:flutter/material.dart';
 
 class UserCard extends StatelessWidget {
-  String? name;
-  String? url;
-  String? skills;
+  final String? name;
+  final String? url;
 
-  UserCard({Key? key, this.name, this.url}) : super(key: key);
+  const UserCard({Key? key, this.name, this.url}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +20,9 @@ class UserCard extends StatelessWidget {
             children: [
               Text(
                 name!,
-                style: TextStyle(fontSize: 20),
+                style: const TextStyle(fontSize: 20),
               ),
-              Text("No Skills")
+              const Text("No Skills")
             ],
           )
         ],
