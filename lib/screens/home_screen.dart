@@ -386,7 +386,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget searchperson(BuildContext context) {
-    const String inviteLink = "shorturl.at/goxJV"; // this is a dummy url
+    const String inviteLink = "shorturl.at/opzI2"; // this is a dummy url
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

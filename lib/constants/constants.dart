@@ -10,6 +10,9 @@ TextStyle roboto18bold = roboto18regular.copyWith(
 TextStyle roboto18white = roboto18bold.copyWith(
   color: Colors.white,
 );
+TextStyle roboto20bold = roboto18bold.copyWith(
+  fontSize: 20,
+);
 TextStyle roboto20white = roboto18white.copyWith(
   fontSize: 20,
 );

@@ -22,139 +22,167 @@ class ViewProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: const Color(0xFF2757C5),
         body: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Center(
-          child: Text(
-            "My Profile",
-            style: roboto36white,
-          ),
-        ),
-        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            UserAvatar(
-              profilePic: url,
+            Center(
+              child: Text(
+                "My Profile",
+                style: roboto36white,
+              ),
             ),
-            Column(
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  margin: const EdgeInsets.only(top: 20, left: 5),
-                  child: const Text(
-                    "Badges",
-                    style: TextStyle(color: Colors.white, fontSize: 22),
-                  ),
+                UserAvatar(
+                  profilePic: url,
                 ),
-                Badges(badgeList: badges),
+                Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(top: 20, left: 5),
+                      child: const Text(
+                        "Badges",
+                        style: TextStyle(color: Colors.white, fontSize: 22),
+                      ),
+                    ),
+                    Badges(badgeList: badges),
+                  ],
+                ),
               ],
             ),
-          ],
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 6),
-          child: Text(
-            "Name",
-            style: roboto20white,
-          ),
-        ),
-        Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: borderRadius10,
-          ),
-          child: Text(
-            name,
-            style: roboto18regular,
-          ),
-        ),
-        const SizedBox(
-          height: 15.0,
-        ),
-        Container(
-          padding: const EdgeInsets.only(left: 6),
-          child: Text(
-            "College",
-            style: roboto20white,
-          ),
-        ),
-        Card(
-          elevation: 5,
-          shape: RoundedRectangleBorder(
-            borderRadius: borderRadius10,
-          ),
-          child: Text(
-            college,
-            style: roboto18regular,
-          ),
-        ),
-        const SizedBox(
-          height: 15.0,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 6),
-                    child: Text(
-                      "Year",
-                      style: roboto20white,
-                    ),
-                  ),
-                  Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: borderRadius10,
-                    ),
-                    child: Text(
-                      year,
-                      style: roboto18regular,
-                    ),
-                  ),
-                ],
+            Container(
+              padding: const EdgeInsets.only(left: 6),
+              child: Text(
+                "Name",
+                style: roboto20bold,
               ),
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.only(left: 6),
-                    child: Text(
-                      "Department",
-                      style: roboto20white,
-                    ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: borderRadius10,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    name,
+                    style: roboto18regular,
                   ),
-                  Card(
-                    elevation: 5,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: borderRadius10,
-                    ),
-                    child: Text(
-                      dept,
-                      style: roboto18regular,
-                    ),
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
+            Container(
+              padding: const EdgeInsets.only(left: 6),
+              child: Text(
+                "College",
+                style: roboto20bold,
+              ),
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.8,
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: borderRadius10,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    college,
+                    style: roboto18regular,
                   ),
-                ],
+                ),
+              ),
+            ),
+            const SizedBox(
+              height: 15.0,
+            ),
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Year",
+                            style: roboto20bold,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: borderRadius10,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              year,
+                              style: roboto18regular,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.only(left: 6),
+                        child: Text(
+                          "Department",
+                          style: roboto20bold,
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: borderRadius10,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              dept,
+                              style: roboto18regular,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 30,
+            ),
+            Center(
+              child: ReusableButton(
+                text: "Go Back",
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
           ],
-        ),
-        const SizedBox(
-          height: 30,
-        ),
-        Center(
-          child: ReusableButton(
-            text: "Go Back",
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
-      ],
-    ));
+        ));
   }
 }
