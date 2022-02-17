@@ -1,6 +1,8 @@
 import 'package:classmates/components/custom_textfield.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/constants/constants.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AddBadgesSheet extends StatefulWidget {
@@ -111,7 +113,17 @@ class _AddBadgesSheetState extends State<AddBadgesSheet> {
                 ),
                 ReusableButton(
                   text: "Submit",
-                  onPressed: () {},
+                  onPressed: () {
+                    String uid = FirebaseAuth.instance.currentUser!.uid;
+                    FirebaseFirestore.instance
+                        .collection("Users")
+                        .doc(uid)
+                        .update({
+                      "Skills":
+                          FieldValue.arrayUnion([badgeDetailController.text])
+                    });
+                    badgeDetailController.clear();
+                  },
                 )
               ],
             ),

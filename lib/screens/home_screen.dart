@@ -1,3 +1,4 @@
+import 'package:classmates/components/badges.dart';
 import 'package:classmates/components/image_picker.dart';
 import 'package:classmates/components/reusable_button.dart';
 import 'package:classmates/components/user_avatar.dart';
@@ -34,6 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String>? deptlist = [];
   List<String>? yearlist = [];
   List<Userprofile> userprof = [];
+  List<String> myskills = [];
 
   DocumentReference docref = FirebaseFirestore.instance
       .collection("Users")
@@ -53,6 +55,11 @@ class _HomeScreenState extends State<HomeScreen> {
           deptController.text = data['Department'];
         }
         if (data.containsKey("image1url")) url = data['image1url'];
+        if (data.containsKey("Skills")) {
+          for (int i = 0; i < data['Skills'].length; i++) {
+            myskills.add(data['Skills'][i]);
+          }
+        }
       });
     }
   }
@@ -113,8 +120,8 @@ class _HomeScreenState extends State<HomeScreen> {
         for (int i = 0; i < docsnapshot.docs.length; i++) {
           userprof.add(Userprofile(
               docsnapshot.docs.elementAt(i).data()['image1url'],
-              docsnapshot.docs.elementAt(i).data()['Name']));
-          Fluttertoast.showToast(msg: userprof.length.toString());
+              docsnapshot.docs.elementAt(i).data()['Name'],
+              docsnapshot.docs.elementAt(i).data()['Skills']));
         }
       });
     }
@@ -252,7 +259,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     style: TextStyle(color: Colors.white, fontSize: 22),
                   ),
                 ),
-                // Badges(badgeList: badgeList,),
+                Badges(
+                  badgeList: myskills,
+                ),
               ],
             ),
           ],
@@ -332,6 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     "Department": deptController.text,
                     "Name": nameController.text,
                     "Uid": FirebaseAuth.instance.currentUser!.uid,
+                    "Skills": []
                   };
                   CloudService().addUserInfo(userData);
                 },
@@ -453,14 +463,27 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 25,
         ),
         Center(
-          child: ReusableButton(
-            text: "Copy Invite Link",
-            onPressed: () async {
-              await Clipboard.setData(
-                const ClipboardData(text: inviteLink),
-              );
-              Fluttertoast.showToast(msg: "Invite Link Copied");
-            },
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ReusableButton(
+                text: "Search",
+                onPressed: () {
+                  getsearchlist(collegesearchController.text,
+                      yearsearchController.text, deptsearchController.text);
+                },
+              ),
+              const SizedBox(width: 20),
+              ReusableButton(
+                text: "Copy Invite Link",
+                onPressed: () async {
+                  await Clipboard.setData(
+                    const ClipboardData(text: inviteLink),
+                  );
+                  Fluttertoast.showToast(msg: "Invite Link Copied");
+                },
+              ),
+            ],
           ),
         ),
       ],

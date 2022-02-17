@@ -60,9 +60,15 @@ class SingleBadge extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius10,
       ),
-      child: Text(
-        badgeName,
-        style: roboto18regular,
+      child: Container(
+        padding: const EdgeInsets.all(4.0),
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.white, width: 2),
+            borderRadius: BorderRadius.circular(10)),
+        child: Text(
+          badgeName,
+          style: roboto18regular,
+        ),
       ),
     );
   }
